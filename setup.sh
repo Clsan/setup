@@ -44,8 +44,9 @@ echo "export NVM_DIR=\"$HOME/.nvm\"" >> ~/.zshrc
 echo "[ -s \"/usr/local/opt/nvm/nvm.sh\" ] && . \"/usr/local/opt/nvm/nvm.sh\"  # This loads nvm" >> ~/.zshrc
 echo "[ -s \"/usr/local/opt/nvm/etc/bash_completion\" ] && . \"/usr/local/opt/nvm/etc/bash_completion\"  # This loads nvm bash_completion" >> ~/.zshrc
 
-# Python
-brew install pipenv
+brew install pipenv # Python
+brew install openjdk@11 # Java
+brew install golang # Golang
 
 # Enable zsh
 zsh

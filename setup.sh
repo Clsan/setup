@@ -47,6 +47,7 @@ echo "[ -s \"/usr/local/opt/nvm/etc/bash_completion\" ] && . \"/usr/local/opt/nv
 brew install pipenv # Python
 brew install openjdk@11 # Java
 brew install golang # Golang
+brew install awscli # Awscli
 
 # Enable zsh
 zsh

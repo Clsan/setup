@@ -7,6 +7,7 @@ cd ~
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+brew install --cask slack # Slack
 brew install --cask telegram # Telegram
 brew install --cask intellij-idea-ce # IntelliJ CE
 brew install --cask pycharm-ce # PyCharm CE

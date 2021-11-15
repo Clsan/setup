@@ -4,8 +4,6 @@ cd ~
 
 # Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 brew install --cask slack # Slack
 brew install --cask telegram # Telegram
@@ -46,9 +44,14 @@ echo "[ -s \"/usr/local/opt/nvm/nvm.sh\" ] && . \"/usr/local/opt/nvm/nvm.sh\"  #
 echo "[ -s \"/usr/local/opt/nvm/etc/bash_completion\" ] && . \"/usr/local/opt/nvm/etc/bash_completion\"  # This loads nvm bash_completion" >> ~/.zshrc
 
 brew install pipenv # Python
-brew install openjdk@11 # Java
 brew install golang # Golang
 brew install awscli # Awscli
+
+# Java
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk install java 11.0.11.j9-adpt
+sdk install gradle 6.8.3
 
 # Enable zsh
 zsh

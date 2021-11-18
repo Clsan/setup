@@ -43,7 +43,10 @@ echo "export NVM_DIR=\"$HOME/.nvm\"" >> ~/.zshrc
 echo "[ -s \"/usr/local/opt/nvm/nvm.sh\" ] && . \"/usr/local/opt/nvm/nvm.sh\"  # This loads nvm" >> ~/.zshrc
 echo "[ -s \"/usr/local/opt/nvm/etc/bash_completion\" ] && . \"/usr/local/opt/nvm/etc/bash_completion\"  # This loads nvm bash_completion" >> ~/.zshrc
 
-brew install pipenv # Python
+# Python
+brew install pyenv
+brew install pipenv
+
 brew install golang # Golang
 brew install awscli # Awscli
 

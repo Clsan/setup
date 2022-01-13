@@ -13,6 +13,7 @@ brew install --cask sublime-text # Sublime
 brew install --cask visual-studio-code # VSCODE
 brew install --cask notion # Notion
 brew install --cask google-chrome # Chrome
+brew install --cask background-music # BackgroundMusic
 
 # Set chrome as default browser
 brew install defaultbrowser

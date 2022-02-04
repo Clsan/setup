@@ -34,7 +34,7 @@ mkdir ~/.vim
 mkdir ~/.vim/colors
 touch ~/.vim/colors/gruvbox.vim & curl -X GET https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim >> ~/.vim/colors/gruvbox.vim
 
-brew install --cask shiftit # Shiftit
+brew install --cask rectangle # Rectangle
 brew install --cask docker # Docker
 
 # NVM (Node Version Manager)

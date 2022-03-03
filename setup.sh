@@ -14,6 +14,7 @@ brew install --cask visual-studio-code # VSCODE
 brew install --cask notion # Notion
 brew install --cask google-chrome # Chrome
 brew install --cask background-music # BackgroundMusic
+brew install --cask gather # Gather town
 
 # Set chrome as default browser
 brew install defaultbrowser

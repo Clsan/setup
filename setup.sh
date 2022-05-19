@@ -60,6 +60,7 @@ sdk install gradle 7.3.3
 
 # ETC
 brew install tree
+brew install vegeta
 
 # Enable zsh
 zsh

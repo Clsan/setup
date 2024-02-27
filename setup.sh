@@ -37,6 +37,11 @@ touch ~/.vim/colors/gruvbox.vim & curl -X GET https://raw.githubusercontent.com/
 brew install --cask rectangle # Rectangle
 brew install --cask docker # Docker
 
+# GVM (Golang Version Manager)
+bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+source /Users/clsan/.gvm/scripts/gvm
+gvm install go1.21
+
 # NVM (Node Version Manager)
 brew install nvm
 mkdir ~/.nvm

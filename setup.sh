@@ -38,6 +38,7 @@ brew install --cask rectangle # Rectangle
 brew install --cask docker # Docker
 
 # GVM (Golang Version Manager)
+# https://github.com/moovweb/gvm
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source /Users/clsan/.gvm/scripts/gvm
 gvm install go1.21

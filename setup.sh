@@ -9,6 +9,8 @@ touch ~/.zshrc
 (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> ~/.zshrc
 zsh
 
+brew install --cask docker # Docker
+brew install --cask rectangle # Rectangle
 brew install --cask slack # Slack
 brew install --cask telegram # Telegram
 brew install --cask intellij-idea-ce # IntelliJ CE
@@ -36,9 +38,6 @@ touch ~/.vimrc & curl -X GET https://raw.githubusercontent.com/Clsan/setup/maste
 mkdir ~/.vim
 mkdir ~/.vim/colors
 touch ~/.vim/colors/gruvbox.vim & curl -X GET https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim >> ~/.vim/colors/gruvbox.vim
-
-brew install --cask rectangle # Rectangle
-brew install --cask docker # Docker
 
 # GVM (Golang Version Manager)
 # https://github.com/moovweb/gvm

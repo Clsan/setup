@@ -4,6 +4,11 @@ cd ~
 
 touch ~/.zshrc
 
+# Zinit
+bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+zsh
+zinit self-update
+
 # Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> ~/.zshrc
@@ -23,13 +28,6 @@ brew install --cask google-chrome # Chrome
 # Set chrome as default browser
 brew install defaultbrowser
 defaultbrowser chrome
-
-# Oh my zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-# Additional zsh settings
-rm -rf ~/.zshrc
-touch ~/.zshrc & curl -X GET https://raw.githubusercontent.com/Clsan/setup/master/.zshrc >> ~/.zshrc
 
 # Vim settings
 touch ~/.vimrc & curl -X GET https://raw.githubusercontent.com/Clsan/setup/master/.vimrc >> ~/.vimrc

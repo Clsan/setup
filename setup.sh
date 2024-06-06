@@ -73,8 +73,8 @@ pipx install poetry
 curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install java 17.0.2.8.1-amzn
-sdk install java 8.322.06.2-amzn
-sdk install gradle 8.7.0
+sdk install java 8.0.412-amzn
+sdk install gradle 8.7
 
 # AWS
 brew install awscli # Awscli

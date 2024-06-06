@@ -42,6 +42,8 @@ mkdir ~/.vim
 mkdir ~/.vim/colors
 touch ~/.vim/colors/gruvbox.vim & curl -X GET https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim >> ~/.vim/colors/gruvbox.vim
 
+# Golang
+brew install golang
 # GVM (Golang Version Manager)
 # https://github.com/moovweb/gvm
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)

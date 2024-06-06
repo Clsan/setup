@@ -71,7 +71,7 @@ curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install java 17.0.2.8.1-amzn
 sdk install java 8.322.06.2-amzn
-sdk install gradle 7.3.3
+sdk install gradle 8.7.0
 
 # ETC
 brew install tree

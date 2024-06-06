@@ -60,11 +60,14 @@ echo "[ -s \"/usr/local/opt/nvm/nvm.sh\" ] && . \"/usr/local/opt/nvm/nvm.sh\"  #
 echo "[ -s \"/usr/local/opt/nvm/etc/bash_completion\" ] && . \"/usr/local/opt/nvm/etc/bash_completion\"  # This loads nvm bash_completion" >> ~/.zshrc
 
 # Python
+# Install pipx
+brew install pipx
+pipx ensurepath
+sudo pipx ensurepath --global
+# Install pyenv (Python version manager)
 brew install pyenv
-brew install pipenv
-
-brew install golang # Golang
-brew install awscli # Awscli
+# Install poetry 
+pipx install poetry
 
 # Java
 curl -s "https://get.sdkman.io" | bash
@@ -72,6 +75,9 @@ source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install java 17.0.2.8.1-amzn
 sdk install java 8.322.06.2-amzn
 sdk install gradle 8.7.0
+
+# AWS
+brew install awscli # Awscli
 
 # ETC
 brew install tree

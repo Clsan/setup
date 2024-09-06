@@ -3,17 +3,13 @@
 mkdir /usr/local/bin
 cd ~
 
-touch ~/.zshrc
-
 # Zinit
 curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh | sh
-source ~/.zshrc
 zinit self-update
 
 # Load starship theme
 curl -sS https://starship.rs/install.sh | sh -s -- --yes # Skip prompt.
 (echo 'eval "$(starship init zsh)"') >> ~/.zshrc
-source ~/.zshrc
 
 # Homebrew
 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | sh
@@ -49,7 +45,7 @@ brew install golang
 # GVM (Golang Version Manager)
 # https://github.com/moovweb/gvm
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-source /Users/clsan/.gvm/scripts/gvm
+source ~/.gvm/scripts/gvm
 gvm install go1.21
 
 # NVM (Node Version Manager)

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir /usr/local/bin
 cd ~
 
 touch ~/.zshrc

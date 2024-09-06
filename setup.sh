@@ -10,7 +10,7 @@ source ~/.zshrc
 zinit self-update
 
 # Load starship theme
-curl -sS https://starship.rs/install.sh | sh
+curl -sS https://starship.rs/install.sh | sh -s -- --yes # Skip prompt.
 (echo 'eval "$(starship init zsh)"') >> ~/.zshrc
 source ~/.zshrc
 

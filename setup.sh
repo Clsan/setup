@@ -6,7 +6,7 @@ cd ~
 touch ~/.zshrc
 
 # Zinit
-bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh | sh
 source ~/.zshrc
 zinit self-update
 
@@ -16,7 +16,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --yes # Skip prompt.
 source ~/.zshrc
 
 # Homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | sh
 (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> ~/.zshrc
 source ~/.zshrc
 

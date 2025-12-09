@@ -34,8 +34,13 @@ echo "📦 Checking Xcode Command Line Tools..."
 if ! xcode-select -p &>/dev/null; then
     echo "Installing Xcode CLT..."
     touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-    PROD=$(softwareupdate -l | grep "\*.*Command Line" | tail -n 1 | sed 's/^[^C]*//')
-    softwareupdate -i "$PROD" --verbose
+    LABEL=$(softwareupdate -l 2>&1 | grep -E '^\s+\*.*Command Line|Label:.*Command Line' | head -n 1 | sed 's/^[^C]*//' | sed 's/.*Label: *//')
+    if [[ -n "$LABEL" ]]; then
+        softwareupdate -i "$LABEL" --verbose
+    else
+        echo "⚠️ Command Line Tools를 찾을 수 없음. 수동 설치 필요: xcode-select --install"
+        exit 1
+    fi
     rm -f /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
 fi
 echo "✅ Xcode CLT ready"
@@ -144,7 +149,7 @@ echo "✅ Python tools ready"
 # Colima (Docker runtime)
 # ============================================
 echo "🐳 Checking Colima..."
-if ! colima status &>/dev/null; then
+if colima status 2>&1 | grep -q "not running\|not exist"; then
     echo "Starting Colima..."
     colima start
 fi

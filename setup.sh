@@ -1,86 +1,172 @@
 #!/bin/bash
+set -e
 
-mkdir /usr/local/bin
-cd ~
+echo "🚀 Mac Setup Script Starting..."
 
-touch ~/.zshrc
+# ============================================
+# Sleep 방지 (caffeinate)
+# - 스크립트 실행 중 Mac이 잠들지 않도록 함
+# - 스크립트 종료 시 자동으로 해제됨
+# ============================================
+caffeinate -dims -w $ &
+CAFFEINATE_PID=$!
+trap "kill $CAFFEINATE_PID 2>/dev/null" EXIT
 
-# Zinit
-curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh | sh
-source ~/.zshrc
-zinit self-update
+# ============================================
+# Helper Functions
+# ============================================
+add_to_zshrc() {
+    grep -qF "$1" ~/.zshrc 2>/dev/null || echo "$1" >> ~/.zshrc
+}
 
-# Load starship theme
-curl -sS https://starship.rs/install.sh | sh -s -- --yes # Skip prompt.
-(echo 'eval "$(starship init zsh)"') >> ~/.zshrc
-source ~/.zshrc
+brew_install() {
+    brew list "$1" &>/dev/null || brew install "$1"
+}
 
+brew_install_cask() {
+    brew list --cask "$1" &>/dev/null || brew install --cask "$1"
+}
+
+# ============================================
+# Xcode Command Line Tools
+# ============================================
+echo "📦 Checking Xcode Command Line Tools..."
+if ! xcode-select -p &>/dev/null; then
+    echo "Installing Xcode CLT..."
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+    PROD=$(softwareupdate -l | grep "\*.*Command Line" | tail -n 1 | sed 's/^[^C]*//')
+    softwareupdate -i "$PROD" --verbose
+    rm -f /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+fi
+echo "✅ Xcode CLT ready"
+
+# ============================================
 # Homebrew
-curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | sh
-(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> ~/.zshrc
-source ~/.zshrc
+# ============================================
+echo "🍺 Checking Homebrew..."
+if ! command -v brew &>/dev/null; then
+    echo "Installing Homebrew..."
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
 
-brew install --cask docker # Docker
-brew install --cask rectangle # Rectangle
-brew install --cask slack # Slack
-brew install --cask telegram # Telegram
-brew install --cask intellij-idea-ce # IntelliJ CE
-brew install --cask pycharm-ce # PyCharm CE
-brew install --cask sublime-text # Sublime
-brew install --cask visual-studio-code # VSCODE
-brew install --cask notion # Notion
-brew install --cask google-chrome # Chrome
-brew install --cask postman # Postman
+eval "$(/opt/homebrew/bin/brew shellenv)"
+add_to_zshrc 'eval "$(/opt/homebrew/bin/brew shellenv)"'
+echo "✅ Homebrew ready"
 
-# Set chrome as default browser
-brew install defaultbrowser
-defaultbrowser chrome
+# ============================================
+# Zinit
+# ============================================
+echo "⚡ Checking Zinit..."
+if [[ ! -d "$HOME/.local/share/zinit" ]]; then
+    echo "Installing Zinit..."
+    bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+fi
+echo "✅ Zinit ready"
 
-# Vim settings
-touch ~/.vimrc & curl -X GET https://raw.githubusercontent.com/Clsan/setup/master/.vimrc >> ~/.vimrc
+# ============================================
+# Starship Prompt
+# ============================================
+echo "🚀 Checking Starship..."
+command -v starship &>/dev/null || curl -sS https://starship.rs/install.sh | sh -s -- --yes
+add_to_zshrc 'eval "$(starship init zsh)"'
+echo "✅ Starship ready"
 
-# Vim colorscheme
-mkdir ~/.vim
-mkdir ~/.vim/colors
-touch ~/.vim/colors/gruvbox.vim & curl -X GET https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim >> ~/.vim/colors/gruvbox.vim
+# ============================================
+# CLI Tools
+# ============================================
+echo "🔧 Installing CLI tools..."
+brew_install tree
+brew_install vegeta
+brew_install awscli
+brew_install defaultbrowser
+brew_install docker
+brew_install docker-compose
+echo "✅ CLI tools ready"
 
-# Golang
-brew install golang
-# GVM (Golang Version Manager)
-# https://github.com/moovweb/gvm
-bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-source /Users/clsan/.gvm/scripts/gvm
-gvm install go1.21
+# ============================================
+# GUI Applications
+# ============================================
+echo "🖥️ Installing applications..."
+brew_install_cask colima
+brew_install_cask rectangle
+brew_install_cask telegram
+brew_install_cask visual-studio-code
+brew_install_cask google-chrome
+brew_install_cask postman
+echo "✅ Applications ready"
 
-# NVM (Node Version Manager)
-brew install nvm
-mkdir ~/.nvm
-echo "export NVM_DIR=\"\$([ -z \"\${XDG_CONFIG_HOME-}\" ] && printf %s \"\${HOME}/.nvm\" || printf %s \"\${XDG_CONFIG_HOME}/nvm\")\"" >> ~/.zshrc
-echo "[ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"" >> ~/.zshrc # This loads nvm
+# ============================================
+# Vim Settings
+# ============================================
+echo "📝 Setting up Vim..."
+mkdir -p ~/.vim/colors
+curl -fsSL https://raw.githubusercontent.com/Clsan/setup/master/.vimrc -o ~/.vimrc
+curl -fsSL https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim -o ~/.vim/colors/gruvbox.vim
+echo "✅ Vim ready"
 
-# Python
-# Install pipx
-brew install pipx
-pipx ensurepath
-sudo pipx ensurepath --global
-# Install pyenv (Python version manager)
-brew install pyenv
-# Install poetry 
-pipx install poetry
+# ============================================
+# mise (Runtime Version Manager)
+# ============================================
+echo "🔄 Checking mise..."
+brew_install mise
+add_to_zshrc 'eval "$(mise activate zsh)"'
+eval "$(mise activate bash)"
 
-# Java
-curl -s "https://get.sdkman.io" | bash
-source "$HOME/.sdkman/bin/sdkman-init.sh"
-sdk install java 17.0.2.8.1-amzn
-sdk install java 8.0.412-amzn
-sdk install gradle 8.7
+echo "🐹 Setting up Go..."
+mise use --global go@1.21
 
-# AWS
-brew install awscli # Awscli
+echo "📦 Setting up Node.js..."
+mise use --global node@lts
 
-# ETC
-brew install tree
-brew install vegeta
+echo "☕ Setting up Java..."
+mise use --global java@corretto-17
+mise use --global java@corretto-8
 
-# Enable zsh
-zsh
+echo "🏗️ Setting up Gradle..."
+mise use --global gradle@8.7
+
+echo "✅ mise and runtimes ready"
+
+# ============================================
+# Python (pyenv + uv)
+# ============================================
+echo "🐍 Setting up Python..."
+brew_install pyenv
+brew_install uv
+
+add_to_zshrc 'export PYENV_ROOT="$HOME/.pyenv"'
+add_to_zshrc '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"'
+add_to_zshrc 'eval "$(pyenv init -)"'
+
+echo "✅ Python tools ready"
+
+# ============================================
+# Colima (Docker runtime)
+# ============================================
+echo "🐳 Checking Colima..."
+if ! colima status &>/dev/null; then
+    echo "Starting Colima..."
+    colima start
+fi
+echo "✅ Colima ready"
+
+# ============================================
+# Default Browser (수동 인터랙션 필요)
+# - macOS 시스템 대화상자가 뜰 수 있음
+# - 원하면 주석 해제 후 실행, 또는 Chrome에서 직접 설정
+# ============================================
+# echo "🌐 Setting Chrome as default browser..."
+# defaultbrowser chrome
+# echo "✅ Chrome set as default"
+
+# ============================================
+# Done!
+# ============================================
+echo ""
+echo "============================================"
+echo "🎉 Setup Complete!"
+echo "============================================"
+echo ""
+echo "새 터미널을 열거나: source ~/.zshrc"
+echo "설치된 런타임 확인: mise list"
+echo ""

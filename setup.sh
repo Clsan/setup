@@ -4,6 +4,14 @@ set -e
 echo "🚀 Mac Setup Script Starting..."
 
 # ============================================
+# sudo 세션 미리 활성화
+# ============================================
+echo "🔐 sudo 비밀번호 입력 (이후 자동 진행됨)..."
+sudo -v
+# sudo 타임아웃 방지
+while true; do sudo -n true; sleep 60; kill -0 "$" || exit; done 2>/dev/null &
+
+# ============================================
 # Sleep 방지 (caffeinate)
 # - 스크립트 실행 중 Mac이 잠들지 않도록 함
 # - 스크립트 종료 시 자동으로 해제됨

@@ -8,7 +8,7 @@ echo "🚀 Mac Setup Script Starting..."
 # - 스크립트 실행 중 Mac이 잠들지 않도록 함
 # - 스크립트 종료 시 자동으로 해제됨
 # ============================================
-caffeinate -dims -w $ &
+caffeinate -disu &
 CAFFEINATE_PID=$!
 trap "kill $CAFFEINATE_PID 2>/dev/null" EXIT
 

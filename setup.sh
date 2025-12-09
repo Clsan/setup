@@ -70,7 +70,7 @@ echo "✅ Homebrew ready"
 # Starship Prompt
 # ============================================
 echo "🚀 Checking Starship..."
-command -v starship &>/dev/null || curl -sS https://starship.rs/install.sh | sh -s -- --yes
+brew_install starship
 add_to_zshrc 'eval "$(starship init zsh)"'
 echo "✅ Starship ready"
 

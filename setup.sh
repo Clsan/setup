@@ -59,16 +59,6 @@ add_to_zshrc 'eval "$(/opt/homebrew/bin/brew shellenv)"'
 echo "✅ Homebrew ready"
 
 # ============================================
-# Zinit
-# ============================================
-echo "⚡ Checking Zinit..."
-if [[ ! -d "$HOME/.local/share/zinit" ]]; then
-    echo "Installing Zinit..."
-    bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
-fi
-echo "✅ Zinit ready"
-
-# ============================================
 # Starship Prompt
 # ============================================
 echo "🚀 Checking Starship..."

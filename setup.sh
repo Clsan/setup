@@ -82,8 +82,9 @@ brew_install tree
 brew_install vegeta
 brew_install awscli
 brew_install defaultbrowser
-brew_install colima
+brew_install docker
 brew_install docker-compose
+brew_install colima
 echo "✅ CLI tools ready"
 
 # ============================================

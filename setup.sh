@@ -82,7 +82,7 @@ brew_install tree
 brew_install vegeta
 brew_install awscli
 brew_install defaultbrowser
-brew_install docker
+brew_install colima
 brew_install docker-compose
 echo "✅ CLI tools ready"
 
@@ -90,7 +90,6 @@ echo "✅ CLI tools ready"
 # GUI Applications
 # ============================================
 echo "🖥️ Installing applications..."
-brew_install_cask colima
 brew_install_cask rectangle
 brew_install_cask telegram
 brew_install_cask visual-studio-code

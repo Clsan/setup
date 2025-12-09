@@ -156,11 +156,10 @@ echo "✅ Colima ready"
 # ============================================
 # Default Browser (수동 인터랙션 필요)
 # - macOS 시스템 대화상자가 뜰 수 있음
-# - 원하면 주석 해제 후 실행, 또는 Chrome에서 직접 설정
 # ============================================
-# echo "🌐 Setting Chrome as default browser..."
-# defaultbrowser chrome
-# echo "✅ Chrome set as default"
+echo "🌐 Setting Chrome as default browser..."
+defaultbrowser chrome
+echo "✅ Chrome set as default"
 
 # ============================================
 # Done!

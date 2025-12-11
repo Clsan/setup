@@ -116,14 +116,14 @@ add_to_zshrc 'eval "$(mise activate zsh)"'
 eval "$(mise activate bash)"
 
 echo "🐹 Setting up Go..."
-mise use --global go@1.21
+mise use --global go@1.24
 
 echo "📦 Setting up Node.js..."
 mise use --global node@lts
 
 echo "☕ Setting up Java..."
-mise use --global java@corretto-17
 mise use --global java@corretto-8
+mise use --global java@corretto-17
 
 echo "🏗️ Setting up Gradle..."
 mise use --global gradle@8.7

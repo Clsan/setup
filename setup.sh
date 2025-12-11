@@ -155,11 +155,63 @@ echo "✅ Colima ready"
 
 # ============================================
 # Default Browser (수동 인터랙션 필요)
-# - macOS 시스템 대화상자가 뜰 수 있음
+# - macOS 시스템 대화상자가 뜨면 Tab+Space로 확인
+# - 스크립트는 멈추지 않고 계속 진행됨
 # ============================================
 echo "🌐 Setting Chrome as default browser..."
 defaultbrowser chrome
 echo "✅ Chrome set as default"
+
+# ============================================
+# Keyboard Shortcuts (키보드 단축키 설정)
+# - Cmd+Space = 입력 소스 변경
+# - Ctrl+Space = Spotlight
+# ============================================
+echo "⌨️ Setting keyboard shortcuts..."
+
+# Modifier keys:
+#   262144 = Ctrl
+#   1048576 = Cmd
+# Key codes:
+#   49 = Space
+#   32 = Space (ASCII)
+
+# Spotlight 검색: Ctrl+Space (key 64)
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 \
+    "<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>type</key><string>standard</string>
+            <key>parameters</key>
+            <array>
+                <integer>32</integer>
+                <integer>49</integer>
+                <integer>262144</integer>
+            </array>
+        </dict>
+    </dict>"
+
+# 입력 소스 변경: Cmd+Space (key 60)
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 \
+    "<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>type</key><string>standard</string>
+            <key>parameters</key>
+            <array>
+                <integer>32</integer>
+                <integer>49</integer>
+                <integer>1048576</integer>
+            </array>
+        </dict>
+    </dict>"
+
+# 변경사항 즉시 적용
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
+echo "✅ Keyboard shortcuts ready"
 
 # ============================================
 # Done!

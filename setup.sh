@@ -1,70 +1,11 @@
 #!/bin/bash
-set -e
-
-echo "🚀 Mac Setup Script Starting..."
+echo "🚀 Personal Mac Setup Starting..."
 
 # ============================================
-# sudo 세션 미리 활성화
+# Common Setup (Xcode CLT, Homebrew, Helpers)
 # ============================================
-echo "🔐 sudo 비밀번호 입력 (이후 자동 진행됨)..."
-sudo -v
-# sudo 타임아웃 방지
-while true; do sudo -n true; sleep 60; kill -0 "$" || exit; done 2>/dev/null &
-
-# ============================================
-# Sleep 방지 (caffeinate)
-# - 스크립트 실행 중 Mac이 잠들지 않도록 함
-# - 스크립트 종료 시 자동으로 해제됨
-# ============================================
-caffeinate -disu &
-CAFFEINATE_PID=$!
-trap "kill $CAFFEINATE_PID 2>/dev/null" EXIT
-
-# ============================================
-# Helper Functions
-# ============================================
-add_to_zshrc() {
-    grep -qF "$1" ~/.zshrc 2>/dev/null || echo "$1" >> ~/.zshrc
-}
-
-brew_install() {
-    brew list "$1" &>/dev/null || brew install "$1"
-}
-
-brew_install_cask() {
-    brew list --cask "$1" &>/dev/null || brew install --cask "$1"
-}
-
-# ============================================
-# Xcode Command Line Tools
-# ============================================
-echo "📦 Checking Xcode Command Line Tools..."
-if ! xcode-select -p &>/dev/null; then
-    echo "Installing Xcode CLT..."
-    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-    LABEL=$(softwareupdate -l 2>&1 | grep -E '^\s+\*.*Command Line|Label:.*Command Line' | head -n 1 | sed 's/^[^C]*//' | sed 's/.*Label: *//')
-    if [[ -n "$LABEL" ]]; then
-        softwareupdate -i "$LABEL" --verbose
-    else
-        echo "⚠️ Command Line Tools를 찾을 수 없음. 수동 설치 필요: xcode-select --install"
-        exit 1
-    fi
-    rm -f /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-fi
-echo "✅ Xcode CLT ready"
-
-# ============================================
-# Homebrew
-# ============================================
-echo "🍺 Checking Homebrew..."
-if ! command -v brew &>/dev/null; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-
-eval "$(/opt/homebrew/bin/brew shellenv)"
-add_to_zshrc 'eval "$(/opt/homebrew/bin/brew shellenv)"'
-echo "✅ Homebrew ready"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/common.sh"
 
 # ============================================
 # Starship Prompt
@@ -154,64 +95,10 @@ fi
 echo "✅ Colima ready"
 
 # ============================================
-# Default Browser (수동 인터랙션 필요)
-# - macOS 시스템 대화상자가 뜨면 Tab+Space로 확인
-# - 스크립트는 멈추지 않고 계속 진행됨
+# macOS System Settings
 # ============================================
-echo "🌐 Setting Chrome as default browser..."
-defaultbrowser chrome
-echo "✅ Chrome set as default"
-
-# ============================================
-# Keyboard Shortcuts (키보드 단축키 설정)
-# - Cmd+Space = 입력 소스 변경
-# - Ctrl+Space = Spotlight
-# ============================================
-echo "⌨️ Setting keyboard shortcuts..."
-
-# Modifier keys:
-#   262144 = Ctrl
-#   1048576 = Cmd
-# Key codes:
-#   49 = Space
-#   32 = Space (ASCII)
-
-# Spotlight 검색: Ctrl+Space (key 64)
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 \
-    "<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>type</key><string>standard</string>
-            <key>parameters</key>
-            <array>
-                <integer>32</integer>
-                <integer>49</integer>
-                <integer>262144</integer>
-            </array>
-        </dict>
-    </dict>"
-
-# 입력 소스 변경: Cmd+Space (key 60)
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 \
-    "<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>type</key><string>standard</string>
-            <key>parameters</key>
-            <array>
-                <integer>32</integer>
-                <integer>49</integer>
-                <integer>1048576</integer>
-            </array>
-        </dict>
-    </dict>"
-
-# 변경사항 즉시 적용
-/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-
-echo "✅ Keyboard shortcuts ready"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/system_setup.sh"
 
 # ============================================
 # Done!

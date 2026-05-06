@@ -45,6 +45,8 @@ jobs:
       HOMEBREW_NO_AUTO_UPDATE: "1"
       HOMEBREW_NO_INSTALL_CLEANUP: "1"
       HOMEBREW_NO_ENV_HINTS: "1"
+      # mise 가 GitHub API 로 릴리즈 태그 조회 — 미인증은 IP 공유 러너에서 60/h 한도라 금방 걸림
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Run setup.sh non-interactively

@@ -104,6 +104,25 @@ defaults write -g com.apple.trackpad.scaling -float 2.0
 echo "✅ Tracking speed configured"
 
 # ============================================
+# Secondary Click (마우스 우클릭 / 트랙패드 보조 클릭)
+# - Magic Mouse: 우측 클릭 활성화
+# - Trackpad: 두 손가락 클릭으로 우클릭
+# ============================================
+echo "🖱️ Enabling secondary click (right-click)..."
+
+# Magic Mouse (Bluetooth, USB 모두)
+defaults write com.apple.driver.AppleBluetoothMultitouch.mouse MouseButtonMode -string "TwoButton"
+defaults write com.apple.driver.AppleHIDMouse Button2 -int 2
+
+# Trackpad: 두 손가락 클릭 = 보조 클릭
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
+
+echo "✅ Secondary click enabled"
+
+# ============================================
 # Dock Settings (Dock 설정)
 # - Finder, Calendar 만 남기고 나머지 제거
 # - Auto-hide 활성화

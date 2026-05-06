@@ -30,37 +30,20 @@ brew_install gh
 echo "✅ CLI tools ready"
 
 # ============================================
-# GitHub Auth + SSH Key (자동화)
-# - SSH 키 자동 생성
-# - 브라우저로 한 번 로그인하면 GitHub에 키 등록까지 자동
+# SSH Key (비대면 준비 — 인증/등록은 마지막 interactive 단계에서)
 # ============================================
-echo "🐙 Setting up GitHub authentication..."
+echo "🔑 Preparing SSH key..."
 SSH_KEY="$HOME/.ssh/id_ed25519"
 if [[ ! -f "$SSH_KEY" ]]; then
-    echo "🔑 SSH 키 생성..."
     mkdir -p "$HOME/.ssh"
     chmod 700 "$HOME/.ssh"
     ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "$(whoami)@$(hostname)"
 fi
-
-# github.com host key를 known_hosts에 미리 등록 (첫 push 프롬프트 방지)
+# github.com host key 사전 등록 (첫 push 프롬프트 방지)
 if ! ssh-keygen -F github.com -f "$HOME/.ssh/known_hosts" &>/dev/null; then
     ssh-keyscan -t ed25519,rsa github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 fi
-
-set +e
-if ! gh auth status &>/dev/null; then
-    echo "🌐 GitHub 로그인 — 브라우저가 열립니다. 한 번만 로그인하면 됩니다."
-    gh auth login --git-protocol ssh --web --hostname github.com --scopes admin:public_key
-fi
-
-LOCAL_PUB=$(awk '{print $2}' "$SSH_KEY.pub")
-if ! gh ssh-key list 2>/dev/null | grep -qF "$LOCAL_PUB"; then
-    echo "🔑 GitHub에 SSH 키 등록..."
-    gh ssh-key add "$SSH_KEY.pub" --title "$(hostname)-$(date +%Y%m%d)"
-fi
-set -e
-echo "✅ GitHub ready"
+echo "✅ SSH key ready"
 
 # ============================================
 # GUI Applications
@@ -129,19 +112,25 @@ fi
 echo "✅ Colima ready"
 
 # ============================================
-# macOS System Settings
+# macOS System Settings (비대면)
 # ============================================
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/system_setup.sh"
 
 # ============================================
-# Done!
+# Interactive Section (사람 필요)
+# - work_setup.sh 처럼 더 뒤에 단계가 남아있는 호출자는
+#   INTERACTIVE_DEFERRED=1 로 스킵하고 자기 끝에서 직접 source
 # ============================================
-echo ""
-echo "============================================"
-echo "🎉 Setup Complete!"
-echo "============================================"
-echo ""
-echo "새 터미널을 열거나: source ~/.zshrc"
-echo "설치된 런타임 확인: mise list"
-echo ""
+if [[ -z "$INTERACTIVE_DEFERRED" ]]; then
+    source "$SCRIPT_DIR/interactive_setup.sh"
+
+    echo ""
+    echo "============================================"
+    echo "🎉 Setup Complete!"
+    echo "============================================"
+    echo ""
+    echo "새 터미널을 열거나: source ~/.zshrc"
+    echo "설치된 런타임 확인: mise list"
+    echo ""
+fi

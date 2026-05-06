@@ -5,14 +5,8 @@
 
 echo "⚙️ Configuring macOS settings..."
 
-# ============================================
-# Default Browser (수동 인터랙션 필요)
-# - macOS 시스템 대화상자가 뜨면 Tab+Space로 확인
-# - 스크립트는 멈추지 않고 계속 진행됨
-# ============================================
-echo "🌐 Setting Chrome as default browser..."
-defaultbrowser chrome
-echo "✅ Chrome set as default"
+# 참고: defaultbrowser 는 macOS 대화상자가 떠서 사람 손길이 필요하므로
+# interactive_setup.sh 로 옮겨졌음
 
 # ============================================
 # Keyboard Shortcuts (키보드 단축키 설정)

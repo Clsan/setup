@@ -57,6 +57,21 @@ brew_install_cask postman
 echo "✅ Applications ready"
 
 # ============================================
+# Rectangle (Recommended preset)
+# - alternateDefaultShortcuts=false → "Recommended" 단축키 사용
+# - launchOnLogin=true → 로그인 시 자동 시작
+# - 첫 실행 환영 다이얼로그 스킵
+# - Accessibility 권한은 interactive_setup.sh 에서 처리
+# ============================================
+echo "📐 Configuring Rectangle (Recommended preset)..."
+defaults write com.knollsoft.Rectangle alternateDefaultShortcuts -bool false
+defaults write com.knollsoft.Rectangle launchOnLogin -bool true
+defaults write com.knollsoft.Rectangle SUEnableAutomaticChecks -bool true
+defaults write com.knollsoft.Rectangle hideMenubarIcon -bool false
+defaults write com.knollsoft.Rectangle subsequentExecutionMode -int 0
+echo "✅ Rectangle configured"
+
+# ============================================
 # Vim Settings
 # ============================================
 echo "📝 Setting up Vim..."

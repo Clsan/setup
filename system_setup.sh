@@ -6,13 +6,13 @@
 echo "⚙️ Configuring macOS settings..."
 
 # ============================================
-# Default Browser (수동 인터랙션 필요)
-# - macOS 시스템 대화상자가 뜨면 Tab+Space로 확인
-# - 스크립트는 멈추지 않고 계속 진행됨
+# Default Browser
+# - 명령 자체는 즉시 리턴 (non-blocking)
+# - macOS 대화상자가 백그라운드에 뜸 → 시간될 때 "Use Chrome" 클릭
 # ============================================
 echo "🌐 Setting Chrome as default browser..."
 defaultbrowser chrome
-echo "✅ Chrome set as default"
+echo "✅ Chrome set as default (다이얼로그 클릭 필요)"
 
 # ============================================
 # Keyboard Shortcuts (키보드 단축키 설정)
@@ -64,6 +64,44 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 \
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 
 echo "✅ Keyboard shortcuts ready"
+
+# ============================================
+# Keyboard Repeat Speed (키 반복 속도)
+# - KeyRepeat: 키 반복 속도 (작을수록 빠름, 슬라이더 최대 = 2)
+# - InitialKeyRepeat: 첫 반복까지 딜레이 (작을수록 짧음, 슬라이더 최소 = 15)
+# - 적용: 로그아웃 후 다시 로그인
+# ============================================
+echo "⌨️ Setting keyboard repeat to max speed..."
+defaults write -g KeyRepeat -int 2
+defaults write -g InitialKeyRepeat -int 15
+echo "✅ Keyboard repeat configured (logout 필요)"
+
+# ============================================
+# Screensaver Idle Time (움직임 없을 때 화면보호기)
+# - 1분 후 시작
+# ============================================
+echo "🖼️ Setting screensaver idle to 1 minute..."
+defaults -currentHost write com.apple.screensaver idleTime -int 60
+echo "✅ Screensaver idle configured"
+
+# ============================================
+# Prevent Sleep on AC Power
+# - "Prevent automatic sleeping when the display is off"에 해당
+# - 백그라운드 작업 항상 돌리려고 비활성화
+# ============================================
+echo "🔋 Disabling automatic sleep on power adapter..."
+sudo pmset -c sleep 0
+echo "✅ Sleep on AC disabled"
+
+# ============================================
+# Mouse / Trackpad Tracking Speed
+# - 슬라이더 끝에서 약 3칸 남긴 위치 (~2.0)
+# - 마우스, 트랙패드 모두 동일 값
+# ============================================
+echo "🖱️ Setting tracking speed..."
+defaults write -g com.apple.mouse.scaling -float 2.0
+defaults write -g com.apple.trackpad.scaling -float 2.0
+echo "✅ Tracking speed configured"
 
 # ============================================
 # Dock Settings (Dock 설정)

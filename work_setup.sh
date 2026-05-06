@@ -3,6 +3,8 @@ echo "💼 Work Mac Setup Starting..."
 
 # ============================================
 # Personal Setup (includes common.sh)
+# - source 로 불러서 setup.sh 안의 인터랙티브 단계는 자동으로 스킵됨
+#   (BASH_SOURCE 체크로 직접 실행일 때만 동작)
 # ============================================
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/setup.sh"
@@ -22,6 +24,11 @@ brew_install_cask okta-verify
 echo "✅ Okta Verify ready"
 
 # ============================================
+# Interactive Section (사람 필요한 단계 한 번에)
+# ============================================
+source "$SCRIPT_DIR/interactive_setup.sh"
+
+# ============================================
 # Done!
 # ============================================
 echo ""
@@ -30,3 +37,5 @@ echo "🎉 Work Setup Complete!"
 echo "- TODO: Install exosphere"
 echo "============================================"
 echo ""
+
+cleanup_downloads "$SCRIPT_DIR"

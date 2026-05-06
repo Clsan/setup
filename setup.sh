@@ -26,7 +26,24 @@ brew_install defaultbrowser
 brew_install docker
 brew_install docker-compose
 brew_install colima
+brew_install gh
 echo "✅ CLI tools ready"
+
+# ============================================
+# SSH Key (비대면 준비 — 인증/등록은 마지막 interactive 단계에서)
+# ============================================
+echo "🔑 Preparing SSH key..."
+SSH_KEY="$HOME/.ssh/id_ed25519"
+if [[ ! -f "$SSH_KEY" ]]; then
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
+    ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "$(whoami)@$(hostname)"
+fi
+# github.com host key 사전 등록 (첫 push 프롬프트 방지)
+if ! ssh-keygen -F github.com -f "$HOME/.ssh/known_hosts" &>/dev/null; then
+    ssh-keyscan -t ed25519,rsa github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
+fi
+echo "✅ SSH key ready"
 
 # ============================================
 # GUI Applications
@@ -38,6 +55,16 @@ brew_install_cask visual-studio-code
 brew_install_cask google-chrome
 brew_install_cask postman
 echo "✅ Applications ready"
+
+# ============================================
+# Rectangle
+# - launchOnLogin 만 미리 설정 (환영 다이얼로그에 없어서 까먹기 쉬움)
+# - 단축키 프리셋, 타일링 끄기, Accessibility 는 첫 실행 UI 에서 안내
+# ============================================
+echo "📐 Launching Rectangle..."
+defaults write com.knollsoft.Rectangle launchOnLogin -bool true
+open -a Rectangle
+echo "✅ Rectangle launched"
 
 # ============================================
 # Vim Settings
@@ -90,24 +117,35 @@ echo "✅ Python tools ready"
 echo "🐳 Checking Colima..."
 if colima status 2>&1 | grep -q "not running\|not exist"; then
     echo "Starting Colima..."
-    colima start
+    # set -e 하에서 colima start 실패가 setup 전체를 죽이지 않도록 격리
+    if ! colima start; then
+        echo "⚠️ Colima 시작 실패 — 나중에 'colima start' 수동 실행"
+    fi
 fi
 echo "✅ Colima ready"
 
 # ============================================
-# macOS System Settings
+# macOS System Settings (비대면)
 # ============================================
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/system_setup.sh"
 
 # ============================================
-# Done!
+# Interactive Section (사람 필요)
+# - 직접 실행 (./setup.sh) 일 때만 진행
+# - source 로 불려왔으면 (work_setup.sh 등) 호출자가 자기 끝에서 처리
 # ============================================
-echo ""
-echo "============================================"
-echo "🎉 Setup Complete!"
-echo "============================================"
-echo ""
-echo "새 터미널을 열거나: source ~/.zshrc"
-echo "설치된 런타임 확인: mise list"
-echo ""
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    source "$SCRIPT_DIR/interactive_setup.sh"
+
+    echo ""
+    echo "============================================"
+    echo "🎉 Setup Complete!"
+    echo "============================================"
+    echo ""
+    echo "새 터미널을 열거나: source ~/.zshrc"
+    echo "설치된 런타임 확인: mise list"
+    echo ""
+
+    cleanup_downloads "$SCRIPT_DIR"
+fi

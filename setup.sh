@@ -113,9 +113,12 @@ echo "✅ Python tools ready"
 
 # ============================================
 # Colima (Docker runtime)
+# - SETUP_NONINTERACTIVE: CI 에선 nested-virt 시작이 오래 걸리고 검증 가치도 낮아 스킵
 # ============================================
 echo "🐳 Checking Colima..."
-if colima status 2>&1 | grep -q "not running\|not exist"; then
+if [[ -n "$SETUP_NONINTERACTIVE" ]]; then
+    echo "  ↳ SETUP_NONINTERACTIVE — colima start 스킵"
+elif colima status 2>&1 | grep -q "not running\|not exist"; then
     echo "Starting Colima..."
     # set -e 하에서 colima start 실패가 setup 전체를 죽이지 않도록 격리
     if ! colima start; then
@@ -136,7 +139,11 @@ source "$SCRIPT_DIR/system_setup.sh"
 # - source 로 불려왔으면 (work_setup.sh 등) 호출자가 자기 끝에서 처리
 # ============================================
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    source "$SCRIPT_DIR/interactive_setup.sh"
+    if [[ -z "$SETUP_NONINTERACTIVE" ]]; then
+        source "$SCRIPT_DIR/interactive_setup.sh"
+    else
+        echo "  ↳ SETUP_NONINTERACTIVE — interactive 단계 스킵"
+    fi
 
     echo ""
     echo "============================================"

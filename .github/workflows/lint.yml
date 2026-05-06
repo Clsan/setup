@@ -5,6 +5,11 @@ on:
   push:
     branches: [master]
 
+# 같은 브랜치에서 푸시가 연달아 일어나면 직전 실행 취소 — macOS 분량 절약
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   shellcheck:
     runs-on: ubuntu-latest
@@ -26,3 +31,21 @@ jobs:
             echo "Checking $f..."
             /bin/bash -n "$f"
           done
+
+  smoke-macos:
+    # 진짜 검증: fresh-ish macOS 러너에서 setup.sh 를 실제로 돌려서
+    # brew 패키지 이름 오타, 사라진 cask, mise 식별자 변경, defaults 키 변경 등
+    # lint 가 못 잡는 회귀를 끝까지 잡는다.
+    # SETUP_NONINTERACTIVE=1 로 gh auth 등 인터랙티브 단계와 colima start 만 스킵.
+    runs-on: macos-latest
+    timeout-minutes: 40
+    env:
+      SETUP_NONINTERACTIVE: "1"
+      # GHA 러너에는 Homebrew/Xcode CLT 가 이미 깔려있어 setup.sh 가 알아서 스킵
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+      HOMEBREW_NO_ENV_HINTS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run setup.sh non-interactively
+        run: ./setup.sh

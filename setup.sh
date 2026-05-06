@@ -26,7 +26,36 @@ brew_install defaultbrowser
 brew_install docker
 brew_install docker-compose
 brew_install colima
+brew_install gh
 echo "✅ CLI tools ready"
+
+# ============================================
+# GitHub Auth + SSH Key (자동화)
+# - SSH 키 자동 생성
+# - 브라우저로 한 번 로그인하면 GitHub에 키 등록까지 자동
+# ============================================
+echo "🐙 Setting up GitHub authentication..."
+SSH_KEY="$HOME/.ssh/id_ed25519"
+if [[ ! -f "$SSH_KEY" ]]; then
+    echo "🔑 SSH 키 생성..."
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
+    ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "$(whoami)@$(hostname)"
+fi
+
+set +e
+if ! gh auth status &>/dev/null; then
+    echo "🌐 GitHub 로그인 — 브라우저가 열립니다. 한 번만 로그인하면 됩니다."
+    gh auth login --git-protocol ssh --web --hostname github.com
+fi
+
+LOCAL_PUB=$(awk '{print $2}' "$SSH_KEY.pub")
+if ! gh ssh-key list 2>/dev/null | grep -qF "$LOCAL_PUB"; then
+    echo "🔑 GitHub에 SSH 키 등록..."
+    gh ssh-key add "$SSH_KEY.pub" --title "$(hostname)-$(date +%Y%m%d)"
+fi
+set -e
+echo "✅ GitHub ready"
 
 # ============================================
 # GUI Applications

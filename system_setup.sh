@@ -66,6 +66,27 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 \
 echo "✅ Keyboard shortcuts ready"
 
 # ============================================
+# Keyboard Repeat Speed (키 반복 속도)
+# - KeyRepeat: 키 반복 속도 (작을수록 빠름, 슬라이더 최대 = 2)
+# - InitialKeyRepeat: 첫 반복까지 딜레이 (작을수록 짧음, 슬라이더 최소 = 15)
+# - 적용: 로그아웃 후 다시 로그인
+# ============================================
+echo "⌨️ Setting keyboard repeat to max speed..."
+defaults write -g KeyRepeat -int 2
+defaults write -g InitialKeyRepeat -int 15
+echo "✅ Keyboard repeat configured (logout 필요)"
+
+# ============================================
+# Mouse / Trackpad Tracking Speed
+# - 슬라이더 끝에서 약 3칸 남긴 위치 (~2.0)
+# - 마우스, 트랙패드 모두 동일 값
+# ============================================
+echo "🖱️ Setting tracking speed..."
+defaults write -g com.apple.mouse.scaling -float 2.0
+defaults write -g com.apple.trackpad.scaling -float 2.0
+echo "✅ Tracking speed configured"
+
+# ============================================
 # Dock Settings (Dock 설정)
 # - Finder, Calendar 만 남기고 나머지 제거
 # - Auto-hide 활성화

@@ -16,18 +16,9 @@ osascript -e 'display notification "Setup이 사람 손길을 기다립니다" w
 printf '\a'
 
 # ============================================
-# 기본 브라우저 (macOS 대화상자 → "Use Chrome" 클릭)
-# ============================================
-echo "🌐 Setting Chrome as default browser..."
-echo "  ↳ macOS 대화상자가 뜨면 'Use Chrome' 클릭"
-defaultbrowser chrome
-echo "✅ Default browser configured"
-
-# ============================================
 # GitHub Auth + SSH Key
 # - 브라우저에서 OTP 한 번 입력하면 끝
 # ============================================
-echo ""
 echo "🐙 GitHub authentication..."
 set +e
 if ! gh auth status &>/dev/null; then

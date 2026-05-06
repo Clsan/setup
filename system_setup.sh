@@ -5,8 +5,14 @@
 
 echo "⚙️ Configuring macOS settings..."
 
-# 참고: defaultbrowser 는 macOS 대화상자가 떠서 사람 손길이 필요하므로
-# interactive_setup.sh 로 옮겨졌음
+# ============================================
+# Default Browser
+# - 명령 자체는 즉시 리턴 (non-blocking)
+# - macOS 대화상자가 백그라운드에 뜸 → 시간될 때 "Use Chrome" 클릭
+# ============================================
+echo "🌐 Setting Chrome as default browser..."
+defaultbrowser chrome
+echo "✅ Chrome set as default (다이얼로그 클릭 필요)"
 
 # ============================================
 # Keyboard Shortcuts (키보드 단축키 설정)

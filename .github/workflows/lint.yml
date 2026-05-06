@@ -1,0 +1,53 @@
+name: lint
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+# 같은 브랜치에서 푸시가 연달아 일어나면 직전 실행 취소 — macOS 분량 절약
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        # SC2016 제외: add_to_zshrc 'eval "$(...)"' 처럼 리터럴 그대로 .zshrc 에 써야 하는 케이스가 의도된 동작
+        run: shellcheck --severity=warning --exclude=SC2016 *.sh
+
+  syntax-check-macos:
+    # macOS 기본 bash 는 3.2 — bash 4+ 기능을 무심코 쓰면 fresh mac 에서만 깨짐
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse-check with system bash (3.2)
+        run: |
+          /bin/bash --version
+          for f in *.sh; do
+            echo "Checking $f..."
+            /bin/bash -n "$f"
+          done
+
+  smoke-macos:
+    # 진짜 검증: fresh-ish macOS 러너에서 setup.sh 를 실제로 돌려서
+    # brew 패키지 이름 오타, 사라진 cask, mise 식별자 변경, defaults 키 변경 등
+    # lint 가 못 잡는 회귀를 끝까지 잡는다.
+    # SETUP_NONINTERACTIVE=1 로 gh auth 등 인터랙티브 단계와 colima start 만 스킵.
+    runs-on: macos-latest
+    timeout-minutes: 40
+    env:
+      SETUP_NONINTERACTIVE: "1"
+      # GHA 러너에는 Homebrew/Xcode CLT 가 이미 깔려있어 setup.sh 가 알아서 스킵
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+      HOMEBREW_NO_ENV_HINTS: "1"
+      # mise 가 GitHub API 로 릴리즈 태그 조회 — 미인증은 IP 공유 러너에서 60/h 한도라 금방 걸림
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run setup.sh non-interactively
+        run: ./setup.sh

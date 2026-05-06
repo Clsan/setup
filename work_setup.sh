@@ -26,7 +26,11 @@ echo "✅ Okta Verify ready"
 # ============================================
 # Interactive Section (사람 필요한 단계 한 번에)
 # ============================================
-source "$SCRIPT_DIR/interactive_setup.sh"
+if [[ -z "$SETUP_NONINTERACTIVE" ]]; then
+    source "$SCRIPT_DIR/interactive_setup.sh"
+else
+    echo "  ↳ SETUP_NONINTERACTIVE — interactive 단계 스킵"
+fi
 
 # ============================================
 # Done!

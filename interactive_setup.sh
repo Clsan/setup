@@ -16,16 +16,6 @@ osascript -e 'display notification "Setup이 사람 손길을 기다립니다" w
 printf '\a'
 
 # ============================================
-# Rectangle Accessibility 권한
-# - Rectangle 은 setup.sh 에서 이미 실행되어 있음
-# - macOS TCC는 SIP 때문에 사용자 클릭 없이 권한을 줄 수 없으므로
-#   Privacy → Accessibility 패널을 열어 사용자가 토글 한 번 켜면 끝
-# ============================================
-echo "📐 Rectangle accessibility..."
-echo "  ↳ Privacy → Accessibility 에서 Rectangle 토글을 켜주세요."
-open "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
-
-# ============================================
 # GitHub Auth + SSH Key
 # - 브라우저에서 OTP 한 번 입력하면 끝
 # ============================================

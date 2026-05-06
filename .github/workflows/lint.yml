@@ -1,0 +1,28 @@
+name: lint
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        # SC2016 제외: add_to_zshrc 'eval "$(...)"' 처럼 리터럴 그대로 .zshrc 에 써야 하는 케이스가 의도된 동작
+        run: shellcheck --severity=warning --exclude=SC2016 *.sh
+
+  syntax-check-macos:
+    # macOS 기본 bash 는 3.2 — bash 4+ 기능을 무심코 쓰면 fresh mac 에서만 깨짐
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse-check with system bash (3.2)
+        run: |
+          /bin/bash --version
+          for f in *.sh; do
+            echo "Checking $f..."
+            /bin/bash -n "$f"
+          done

@@ -18,7 +18,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # ============================================
 caffeinate -disu &
 CAFFEINATE_PID=$!
-trap "kill $CAFFEINATE_PID 2>/dev/null" EXIT
+trap 'kill $CAFFEINATE_PID 2>/dev/null' EXIT
 
 # ============================================
 # Helper Functions

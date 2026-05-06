@@ -17,13 +17,12 @@ printf '\a'
 
 # ============================================
 # Rectangle Accessibility 권한
-# - macOS TCC는 사용자 클릭 없이 권한을 줄 수 없음 (SIP)
-# - 그래서 Rectangle 실행해서 OS 다이얼로그 띄우고 시스템 설정 패널을 열어줌
-# - 사용자는 패널의 Rectangle 토글 한 번 켜면 끝
+# - Rectangle 은 setup.sh 에서 이미 실행되어 있음
+# - macOS TCC는 SIP 때문에 사용자 클릭 없이 권한을 줄 수 없으므로
+#   Privacy → Accessibility 패널을 열어 사용자가 토글 한 번 켜면 끝
 # ============================================
 echo "📐 Rectangle accessibility..."
-echo "  ↳ 시스템 설정 패널이 열립니다 — Rectangle 토글을 켜주세요."
-open -a Rectangle 2>/dev/null
+echo "  ↳ Privacy → Accessibility 에서 Rectangle 토글을 켜주세요."
 open "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
 
 # ============================================

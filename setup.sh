@@ -69,7 +69,9 @@ defaults write com.knollsoft.Rectangle launchOnLogin -bool true
 defaults write com.knollsoft.Rectangle SUEnableAutomaticChecks -bool true
 defaults write com.knollsoft.Rectangle hideMenubarIcon -bool false
 defaults write com.knollsoft.Rectangle subsequentExecutionMode -int 0
-echo "✅ Rectangle configured"
+# 첫 실행 → macOS의 Accessibility 권한 다이얼로그가 백그라운드에 뜸
+open -a Rectangle
+echo "✅ Rectangle launched (Accessibility 토글은 마지막 단계에서)"
 
 # ============================================
 # Vim Settings

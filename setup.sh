@@ -43,10 +43,15 @@ if [[ ! -f "$SSH_KEY" ]]; then
     ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "$(whoami)@$(hostname)"
 fi
 
+# github.com host key를 known_hosts에 미리 등록 (첫 push 프롬프트 방지)
+if ! ssh-keygen -F github.com -f "$HOME/.ssh/known_hosts" &>/dev/null; then
+    ssh-keyscan -t ed25519,rsa github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
+fi
+
 set +e
 if ! gh auth status &>/dev/null; then
     echo "🌐 GitHub 로그인 — 브라우저가 열립니다. 한 번만 로그인하면 됩니다."
-    gh auth login --git-protocol ssh --web --hostname github.com
+    gh auth login --git-protocol ssh --web --hostname github.com --scopes admin:public_key
 fi
 
 LOCAL_PUB=$(awk '{print $2}' "$SSH_KEY.pub")

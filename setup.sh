@@ -57,28 +57,14 @@ brew_install_cask postman
 echo "✅ Applications ready"
 
 # ============================================
-# Rectangle (Recommended preset)
-# - alternateDefaultShortcuts=false → "Recommended" 단축키 사용
-# - launchOnLogin=true → 로그인 시 자동 시작
-# - 첫 실행 환영 다이얼로그 스킵
-# - Accessibility 권한은 interactive_setup.sh 에서 처리
+# Rectangle
+# - launchOnLogin 만 미리 설정 (환영 다이얼로그에 없어서 까먹기 쉬움)
+# - 단축키 프리셋, 타일링 끄기, Accessibility 는 첫 실행 UI 에서 안내
 # ============================================
-echo "📐 Configuring Rectangle (Recommended preset)..."
-defaults write com.knollsoft.Rectangle alternateDefaultShortcuts -bool false
+echo "📐 Launching Rectangle..."
 defaults write com.knollsoft.Rectangle launchOnLogin -bool true
-defaults write com.knollsoft.Rectangle SUEnableAutomaticChecks -bool true
-defaults write com.knollsoft.Rectangle hideMenubarIcon -bool false
-defaults write com.knollsoft.Rectangle subsequentExecutionMode -int 0
-
-# macOS Sequoia 내장 타일링 비활성화 (Rectangle 과 충돌 방지)
-defaults write com.apple.WindowManager EnableTilingByEdgeDrag -bool false
-defaults write com.apple.WindowManager EnableTopTilingByEdgeDrag -bool false
-defaults write com.apple.WindowManager EnableTilingOptionAccelerator -bool false
-defaults write com.apple.WindowManager EnableTiledWindowMargins -bool false
-
-# 첫 실행 → macOS의 Accessibility 권한 다이얼로그가 백그라운드에 뜸
 open -a Rectangle
-echo "✅ Rectangle launched (Accessibility 토글은 마지막 단계에서)"
+echo "✅ Rectangle launched"
 
 # ============================================
 # Vim Settings

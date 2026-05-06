@@ -77,6 +77,14 @@ defaults write -g InitialKeyRepeat -int 15
 echo "✅ Keyboard repeat configured (logout 필요)"
 
 # ============================================
+# Screensaver Idle Time (움직임 없을 때 화면보호기)
+# - 1분 후 시작
+# ============================================
+echo "🖼️ Setting screensaver idle to 1 minute..."
+defaults -currentHost write com.apple.screensaver idleTime -int 60
+echo "✅ Screensaver idle configured"
+
+# ============================================
 # Prevent Sleep on AC Power
 # - "Prevent automatic sleeping when the display is off"에 해당
 # - 백그라운드 작업 항상 돌리려고 비활성화

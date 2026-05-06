@@ -136,10 +136,10 @@ source "$SCRIPT_DIR/system_setup.sh"
 
 # ============================================
 # Interactive Section (사람 필요)
-# - work_setup.sh 처럼 더 뒤에 단계가 남아있는 호출자는
-#   INTERACTIVE_DEFERRED=1 로 스킵하고 자기 끝에서 직접 source
+# - 직접 실행 (./setup.sh) 일 때만 진행
+# - source 로 불려왔으면 (work_setup.sh 등) 호출자가 자기 끝에서 처리
 # ============================================
-if [[ -z "$INTERACTIVE_DEFERRED" ]]; then
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     source "$SCRIPT_DIR/interactive_setup.sh"
 
     echo ""
@@ -150,4 +150,6 @@ if [[ -z "$INTERACTIVE_DEFERRED" ]]; then
     echo "새 터미널을 열거나: source ~/.zshrc"
     echo "설치된 런타임 확인: mise list"
     echo ""
+
+    cleanup_downloads "$SCRIPT_DIR"
 fi

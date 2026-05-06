@@ -35,6 +35,17 @@ brew_install_cask() {
     brew list --cask "$1" &>/dev/null || brew install --cask "$1"
 }
 
+# 다운받아 실행한 .sh 파일들을 끝나면 정리
+# git 체크아웃에서 돌릴 때는 작업 트리를 건드리면 안 되므로 스킵
+cleanup_downloads() {
+    local dir="$1"
+    if git -C "$dir" rev-parse --is-inside-work-tree &>/dev/null; then
+        return 0
+    fi
+    echo "🧹 Cleaning up downloaded scripts..."
+    rm -f "$dir"/{common,system_setup,interactive_setup,setup,work_setup}.sh
+}
+
 # ============================================
 # Xcode Command Line Tools
 # ============================================

@@ -77,6 +77,15 @@ defaults write -g InitialKeyRepeat -int 15
 echo "✅ Keyboard repeat configured (logout 필요)"
 
 # ============================================
+# Prevent Sleep on AC Power
+# - "Prevent automatic sleeping when the display is off"에 해당
+# - 백그라운드 작업 항상 돌리려고 비활성화
+# ============================================
+echo "🔋 Disabling automatic sleep on power adapter..."
+sudo pmset -c sleep 0
+echo "✅ Sleep on AC disabled"
+
+# ============================================
 # Mouse / Trackpad Tracking Speed
 # - 슬라이더 끝에서 약 3칸 남긴 위치 (~2.0)
 # - 마우스, 트랙패드 모두 동일 값

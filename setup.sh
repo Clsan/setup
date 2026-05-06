@@ -117,7 +117,10 @@ echo "✅ Python tools ready"
 echo "🐳 Checking Colima..."
 if colima status 2>&1 | grep -q "not running\|not exist"; then
     echo "Starting Colima..."
-    colima start
+    # set -e 하에서 colima start 실패가 setup 전체를 죽이지 않도록 격리
+    if ! colima start; then
+        echo "⚠️ Colima 시작 실패 — 나중에 'colima start' 수동 실행"
+    fi
 fi
 echo "✅ Colima ready"
 

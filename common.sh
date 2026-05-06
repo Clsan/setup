@@ -10,8 +10,8 @@ set -e
 # ============================================
 echo "🔐 sudo 비밀번호 입력 (이후 자동 진행됨)..."
 sudo -v
-# sudo 타임아웃 방지
-while true; do sudo -n true; sleep 60; kill -0 "$" || exit; done 2>/dev/null &
+# sudo 타임아웃 방지 — 부모(스크립트) 프로세스가 끝나면 같이 종료
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 # ============================================
 # Sleep 방지 (caffeinate)

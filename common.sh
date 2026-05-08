@@ -23,8 +23,30 @@ trap 'kill $CAFFEINATE_PID 2>/dev/null' EXIT
 # ============================================
 # Helper Functions
 # ============================================
-add_to_zshrc() {
-    grep -qF "$1" ~/.zshrc 2>/dev/null || echo "$1" >> ~/.zshrc
+append_block_if_missing() {
+    local file="$1"
+    local marker="$2"
+
+    mkdir -p "$(dirname "$file")"
+    touch "$file"
+
+    if grep -qF "$marker" "$file"; then
+        return 0
+    fi
+
+    if [[ -s "$file" ]]; then
+        printf "\n" >> "$file"
+    fi
+    cat >> "$file"
+}
+
+append_line_if_missing() {
+    local file="$1"
+    local line="$2"
+
+    append_block_if_missing "$file" "$line" <<EOF
+$line
+EOF
 }
 
 brew_install() {
@@ -74,5 +96,5 @@ if ! command -v brew &>/dev/null; then
 fi
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
-add_to_zshrc 'eval "$(/opt/homebrew/bin/brew shellenv)"'
+append_line_if_missing "$HOME/.zshrc" 'eval "$(/opt/homebrew/bin/brew shellenv)"'
 echo "✅ Homebrew ready"

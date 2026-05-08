@@ -54,7 +54,17 @@ brew_install() {
 }
 
 brew_install_cask() {
-    brew list --cask "$1" &>/dev/null || brew install --cask "$1"
+    local cask="$1"
+
+    if brew list --cask "$cask" &>/dev/null; then
+        return 0
+    fi
+
+    brew install --cask "$cask" || {
+        echo "⚠️ Cask $cask install failed. Updating Homebrew and retrying..."
+        brew update
+        brew install --cask "$cask"
+    }
 }
 
 # 다운받아 실행한 .sh 파일들을 끝나면 정리

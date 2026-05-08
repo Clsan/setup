@@ -1,4 +1,4 @@
-name: lint
+name: ci
 
 on:
   pull_request:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run shellcheck
-        # SC2016 제외: add_to_zshrc 'eval "$(...)"' 처럼 리터럴 그대로 .zshrc 에 써야 하는 케이스가 의도된 동작
+        # SC2016 제외: append_line_if_missing 으로 리터럴 그대로 .zshrc 에 써야 하는 케이스가 의도된 동작
         run: shellcheck --severity=warning --exclude=SC2016 *.sh
 
   syntax-check-macos:

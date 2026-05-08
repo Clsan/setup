@@ -57,9 +57,11 @@ brew_install_cask() {
     local cask="$1"
 
     if brew list --cask "$cask" &>/dev/null; then
+        echo "  ↳ Cask $cask already installed"
         return 0
     fi
 
+    echo "  ↳ Installing cask $cask"
     brew install --cask "$cask" || {
         echo "⚠️ Cask $cask install failed. Updating Homebrew and retrying..."
         brew update

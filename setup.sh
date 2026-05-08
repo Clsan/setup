@@ -12,7 +12,7 @@ source "$SCRIPT_DIR/common.sh"
 # ============================================
 echo "🚀 Checking Starship..."
 brew_install starship
-add_to_zshrc 'eval "$(starship init zsh)"'
+append_line_if_missing "$HOME/.zshrc" 'eval "$(starship init zsh)"'
 echo "✅ Starship ready"
 
 # ============================================
@@ -80,7 +80,7 @@ echo "✅ Vim ready"
 # ============================================
 echo "🔄 Checking mise..."
 brew_install mise
-add_to_zshrc 'eval "$(mise activate zsh)"'
+append_line_if_missing "$HOME/.zshrc" 'eval "$(mise activate zsh)"'
 eval "$(mise activate bash)"
 
 echo "🐹 Setting up Go..."
@@ -105,9 +105,9 @@ echo "🐍 Setting up Python..."
 brew_install pyenv
 brew_install uv
 
-add_to_zshrc 'export PYENV_ROOT="$HOME/.pyenv"'
-add_to_zshrc '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"'
-add_to_zshrc 'eval "$(pyenv init -)"'
+append_line_if_missing "$HOME/.zshrc" 'export PYENV_ROOT="$HOME/.pyenv"'
+append_line_if_missing "$HOME/.zshrc" '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"'
+append_line_if_missing "$HOME/.zshrc" 'eval "$(pyenv init -)"'
 
 echo "✅ Python tools ready"
 

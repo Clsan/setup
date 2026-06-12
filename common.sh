@@ -77,7 +77,7 @@ cleanup_downloads() {
         return 0
     fi
     echo "🧹 Cleaning up downloaded scripts..."
-    rm -f "$dir"/{common,system_setup,interactive_setup,setup,work_setup}.sh
+    rm -f "$dir"/{common,system_setup,interactive_setup,setup,work_setup,nvim_setup}.sh
 }
 
 # ============================================

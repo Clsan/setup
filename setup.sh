@@ -76,6 +76,11 @@ curl -fsSL https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvb
 echo "✅ Vim ready"
 
 # ============================================
+# Neovim + LazyVim + avante.nvim
+# ============================================
+source "$SCRIPT_DIR/nvim_setup.sh"
+
+# ============================================
 # mise (Runtime Version Manager)
 # ============================================
 echo "🔄 Checking mise..."

@@ -72,6 +72,11 @@ else
     fi
 fi
 
+# keymaps.lua — terminal mode 에서 Esc Esc 로 normal 모드로 이동
+KEYMAPS_DEST="$NVIM_CONFIG/lua/config/keymaps.lua"
+append_line_if_missing "$KEYMAPS_DEST" 'vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-N>", { desc = "Exit terminal mode" })'
+echo "  ↳ keymaps.lua terminal keymap 확인/추가"
+
 echo "✅ Neovim + LazyVim + avante + im-select ready"
 echo "  ↳ 첫 nvim 실행 시 LazyVim 이 플러그인을 자동 설치합니다 (avante 빌드 포함)"
 echo "  ↳ avante 프로바이더/API 키는 미설정 — $AVANTE_DEST 참고"

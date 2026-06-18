@@ -17,6 +17,7 @@ brew_install neovim
 brew_install ripgrep   # Telescope live-grep
 brew_install fd        # Telescope find files
 brew_install lazygit   # LazyVim git UI 통합
+brew_tap_and_install daipeihust/tap im-select  # 입력 소스 자동 전환 (im-select.nvim)
 brew_install_cask font-jetbrains-mono-nerd-font  # 아이콘 글리프
 
 # ============================================
@@ -34,17 +35,19 @@ else
 fi
 
 # ============================================
-# avante.nvim plugin spec 배치
+# plugin spec 배치 (avante.nvim, im-select.nvim)
 # - git 체크아웃이면 저장소 파일 사용, 다운로드 모드면 raw GitHub 에서 curl
 #   (PR CI 에서 아직 master 에 없는 파일을 404 로 받는 문제 방지)
 # ============================================
+mkdir -p "$NVIM_CONFIG/lua/plugins"
+
+# avante.nvim
 AVANTE_DEST="$NVIM_CONFIG/lua/plugins/avante.lua"
 AVANTE_SRC="$NVIM_SCRIPT_DIR/nvim/lua/plugins/avante.lua"
 if [[ -f "$AVANTE_DEST" ]]; then
     # 로컬에서 프로바이더(예: 사내 게이트웨이)를 직접 설정해 둘 수 있으므로 덮어쓰지 않음
     echo "  ↳ avante.lua 이미 존재 — 배치 스킵 (로컬 설정 보존)"
 else
-    mkdir -p "$(dirname "$AVANTE_DEST")"
     if [[ -f "$AVANTE_SRC" ]]; then
         cp "$AVANTE_SRC" "$AVANTE_DEST"
         echo "  ↳ avante.lua 배치 (로컬)"
@@ -54,6 +57,27 @@ else
     fi
 fi
 
-echo "✅ Neovim + LazyVim + avante ready"
+# im-select.nvim
+IMSELECT_DEST="$NVIM_CONFIG/lua/plugins/im-select.lua"
+IMSELECT_SRC="$NVIM_SCRIPT_DIR/nvim/lua/plugins/im-select.lua"
+if [[ -f "$IMSELECT_DEST" ]]; then
+    echo "  ↳ im-select.lua 이미 존재 — 배치 스킵 (로컬 설정 보존)"
+else
+    if [[ -f "$IMSELECT_SRC" ]]; then
+        cp "$IMSELECT_SRC" "$IMSELECT_DEST"
+        echo "  ↳ im-select.lua 배치 (로컬)"
+    else
+        curl -fsSL https://raw.githubusercontent.com/Clsan/setup/master/nvim/lua/plugins/im-select.lua -o "$IMSELECT_DEST"
+        echo "  ↳ im-select.lua 배치 (curl)"
+    fi
+fi
+
+# keymaps.lua — terminal mode 에서 Esc Esc 로 normal 모드로 이동
+KEYMAPS_DEST="$NVIM_CONFIG/lua/config/keymaps.lua"
+append_line_if_missing "$KEYMAPS_DEST" 'vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-N>", { desc = "Exit terminal mode" })'
+echo "  ↳ keymaps.lua terminal keymap 확인/추가"
+
+echo "✅ Neovim + LazyVim + avante + im-select ready"
 echo "  ↳ 첫 nvim 실행 시 LazyVim 이 플러그인을 자동 설치합니다 (avante 빌드 포함)"
 echo "  ↳ avante 프로바이더/API 키는 미설정 — $AVANTE_DEST 참고"
+echo "  ↳ im-select: normal mode 진입 시 자동으로 영문 입력으로 전환"

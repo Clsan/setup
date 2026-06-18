@@ -17,17 +17,8 @@ brew_install neovim
 brew_install ripgrep   # Telescope live-grep
 brew_install fd        # Telescope find files
 brew_install lazygit   # LazyVim git UI 통합
+brew_tap_and_install daipeihust/tap im-select  # 입력 소스 자동 전환 (im-select.nvim)
 brew_install_cask font-jetbrains-mono-nerd-font  # 아이콘 글리프
-
-# im-select (입력 소스 자동 전환)
-if ! command -v im-select &>/dev/null; then
-    echo "  ↳ Installing im-select..."
-    brew tap daipeihust/tap
-    brew trust daipeihust/tap 2>/dev/null || true
-    brew install im-select
-else
-    echo "  ↳ im-select already installed"
-fi
 
 # ============================================
 # LazyVim 부트스트랩

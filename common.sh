@@ -69,6 +69,21 @@ brew_install_cask() {
     }
 }
 
+brew_tap_and_install() {
+    local tap="$1"
+    local formula="$2"
+
+    if command -v "$formula" &>/dev/null; then
+        echo "  ↳ $formula already installed"
+        return 0
+    fi
+
+    echo "  ↳ Installing $formula from $tap..."
+    brew tap "$tap"
+    brew trust "$tap" 2>/dev/null || true
+    brew install "$formula"
+}
+
 # 다운받아 실행한 .sh 파일들을 끝나면 정리
 # git 체크아웃에서 돌릴 때는 작업 트리를 건드리면 안 되므로 스킵
 cleanup_downloads() {

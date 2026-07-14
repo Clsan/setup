@@ -60,8 +60,8 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 \
         </dict>
     </dict>"
 
-# 변경사항 즉시 적용
-/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+# 변경사항 즉시 적용 (GUI 세션 필요 — 헤드리스 CI 에선 실패할 수 있어 best-effort)
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u || true
 
 echo "✅ Keyboard shortcuts ready"
 
@@ -154,8 +154,8 @@ defaults write com.apple.dock autohide-delay -float 0
 # Auto-hide 애니메이션 속도 (빠르게)
 defaults write com.apple.dock autohide-time-modifier -float 0.3
 
-# Dock 재시작하여 변경사항 적용
-killall Dock
+# Dock 재시작하여 변경사항 적용 (Dock 미실행 시 killall 이 비정상 종료 → set -e 회피)
+killall Dock || true
 
 echo "✅ Dock configured"
 

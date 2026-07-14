@@ -21,6 +21,13 @@ CAFFEINATE_PID=$!
 trap 'kill $CAFFEINATE_PID 2>/dev/null' EXIT
 
 # ============================================
+# Homebrew tap trust
+# - GitHub Actions macOS 러너에 aws/tap 이 기본으로 미리 tap 되어 있어서
+#   brew install/update 할 때마다 "not trusted" 경고가 뜸 — 신뢰하는 tap 이므로 미리 승인
+# ============================================
+brew trust --tap aws/tap 2>/dev/null || true
+
+# ============================================
 # Helper Functions
 # ============================================
 append_block_if_missing() {
@@ -63,8 +70,11 @@ brew_install_cask() {
 
     echo "  ↳ Installing cask $cask"
     brew install --cask "$cask" || {
-        echo "⚠️ Cask $cask install failed. Updating Homebrew and retrying..."
+        echo "⚠️ Cask $cask install failed. Updating Homebrew and retrying with a forced re-download..."
         brew update
+        # 체크섬 불일치는 대개 벤더 CDN 이 같은 URL 에 다른 바이너리를 올려서 생기는 일시적 현상 —
+        # 캐시된(잘못된) 다운로드를 버리고 강제로 다시 받아야 재시도가 의미 있음
+        brew fetch --force --cask "$cask" || true
         brew install --cask "$cask"
     }
 }

@@ -61,10 +61,15 @@ echo "✅ Applications ready"
 # - launchOnLogin 만 미리 설정 (환영 다이얼로그에 없어서 까먹기 쉬움)
 # - 단축키 프리셋, 타일링 끄기, Accessibility 는 첫 실행 UI 에서 안내
 # ============================================
-echo "📐 Launching Rectangle..."
+echo "📐 Configuring Rectangle..."
 defaults write com.knollsoft.Rectangle launchOnLogin -bool true
-open -a Rectangle
-echo "✅ Rectangle launched"
+# GUI 앱 실행은 데스크톱에서만 의미 있음 — 헤드리스 CI 러너에선 open -a 가 비정상 종료해 set -e 로 전체가 죽음
+if [[ -n "$SETUP_NONINTERACTIVE" ]]; then
+    echo "  ↳ SETUP_NONINTERACTIVE — Rectangle 실행 스킵"
+else
+    open -a Rectangle
+fi
+echo "✅ Rectangle ready"
 
 # ============================================
 # Vim Settings
@@ -90,6 +95,8 @@ eval "$(mise activate bash)"
 
 echo "🐹 Setting up Go..."
 mise use --global go@1.24
+append_line_if_missing "$HOME/.zshrc" 'export GOPATH="$HOME/.local/share/go"'
+append_line_if_missing "$HOME/.zshrc" 'export PATH="$GOPATH/bin:$PATH"'
 
 echo "📦 Setting up Node.js..."
 mise use --global node@lts

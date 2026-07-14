@@ -90,6 +90,8 @@ eval "$(mise activate bash)"
 
 echo "🐹 Setting up Go..."
 mise use --global go@1.24
+append_line_if_missing "$HOME/.zshrc" 'export GOPATH="$HOME/.local/share/go"'
+append_line_if_missing "$HOME/.zshrc" 'export PATH="$GOPATH/bin:$PATH"'
 
 echo "📦 Setting up Node.js..."
 mise use --global node@lts

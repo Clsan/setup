@@ -63,8 +63,11 @@ brew_install_cask() {
 
     echo "  ↳ Installing cask $cask"
     brew install --cask "$cask" || {
-        echo "⚠️ Cask $cask install failed. Updating Homebrew and retrying..."
+        echo "⚠️ Cask $cask install failed. Updating Homebrew and retrying with a forced re-download..."
         brew update
+        # 체크섬 불일치는 대개 벤더 CDN 이 같은 URL 에 다른 바이너리를 올려서 생기는 일시적 현상 —
+        # 캐시된(잘못된) 다운로드를 버리고 강제로 다시 받아야 재시도가 의미 있음
+        brew fetch --force --cask "$cask" || true
         brew install --cask "$cask"
     }
 }

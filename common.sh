@@ -21,6 +21,13 @@ CAFFEINATE_PID=$!
 trap 'kill $CAFFEINATE_PID 2>/dev/null' EXIT
 
 # ============================================
+# Homebrew tap trust
+# - GitHub Actions macOS 러너에 aws/tap 이 기본으로 미리 tap 되어 있어서
+#   brew install/update 할 때마다 "not trusted" 경고가 뜸 — 신뢰하는 tap 이므로 미리 승인
+# ============================================
+brew trust --tap aws/tap 2>/dev/null || true
+
+# ============================================
 # Helper Functions
 # ============================================
 append_block_if_missing() {
